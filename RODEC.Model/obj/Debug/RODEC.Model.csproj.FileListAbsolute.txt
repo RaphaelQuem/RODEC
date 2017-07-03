@@ -1,0 +1,6 @@
+C:\RODEC\RODEC\RODEC.Model\obj\Debug\RODEC.Model.csprojResolveAssemblyReference.cache
+C:\RODEC\RODEC\RODEC.Model\bin\Debug\RODEC.Model.dll
+C:\RODEC\RODEC\RODEC.Model\bin\Debug\RODEC.Model.pdb
+C:\RODEC\RODEC\RODEC.Model\bin\Debug\Newtonsoft.Json.dll
+C:\RODEC\RODEC\RODEC.Model\obj\Debug\RODEC.Model.dll
+C:\RODEC\RODEC\RODEC.Model\obj\Debug\RODEC.Model.pdb
