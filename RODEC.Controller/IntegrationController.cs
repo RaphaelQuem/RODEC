@@ -11,7 +11,7 @@ namespace RODEC.Controller
 {
     public class IntegrationController
     {
-        public  void ExportaCadMat()
+        public  void ExportItems()
         {
             try
             {
