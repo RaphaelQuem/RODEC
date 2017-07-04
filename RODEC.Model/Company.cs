@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace RODEC.Model
 {
-    class Company
+    public class Company
     {
+        public string Code { get; set; }
+        public string State { get; set; }
     }
 }

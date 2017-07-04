@@ -16,7 +16,6 @@ namespace RODEC
             while (true)
             {
                 controller.ExportItems();
-                //ImportaReducaoZ();
             }
         }
     }

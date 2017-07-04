@@ -20,3 +20,7 @@ C:\Repos\RODEC\RODEC\bin\Debug\Newtonsoft.Json.dll
 C:\Repos\RODEC\RODEC\bin\Debug\RODEC.Controller.pdb
 C:\Repos\RODEC\RODEC\bin\Debug\RODEC.Model.pdb
 C:\Repos\RODEC\RODEC\obj\Debug\RODEC.csprojResolveAssemblyReference.cache
+C:\Repos\RODEC\RODEC\bin\Debug\RODEC.DAO.dll
+C:\Repos\RODEC\RODEC\bin\Debug\RODEC.Infra.dll
+C:\Repos\RODEC\RODEC\bin\Debug\RODEC.DAO.pdb
+C:\Repos\RODEC\RODEC\bin\Debug\RODEC.Infra.pdb

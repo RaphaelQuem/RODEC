@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace RODEC.Infra
 {
-    public class ExtensionMethods
+    public static class ExtensionMethods
     {
-        public static T ToSingleViewModel<T>(this IDataReader rdr)
+        public static T ToSingleModel<T>(this IDataReader rdr)
         {
 
             if (rdr.Read())

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace RODEC.DAO
 {
-    public class Class1
+    public class ItemDAO
     {
+
     }
 }

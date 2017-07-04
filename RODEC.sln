@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RODEC.Controller", "RODEC.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RODEC.Model", "RODEC.Model\RODEC.Model.csproj", "{279EF28C-788C-4348-BD97-B106B3885250}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RODEC.DAO", "RODEC.DAO\RODEC.DAO.csproj", "{A503ED5C-C595-4B14-9A1B-81FB96B5403C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RODEC.Infra", "RODEC.Infra\RODEC.Infra.csproj", "{D4261AE6-107E-42AA-9B6D-01E24BF1B767}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{279EF28C-788C-4348-BD97-B106B3885250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{279EF28C-788C-4348-BD97-B106B3885250}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{279EF28C-788C-4348-BD97-B106B3885250}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A503ED5C-C595-4B14-9A1B-81FB96B5403C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A503ED5C-C595-4B14-9A1B-81FB96B5403C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A503ED5C-C595-4B14-9A1B-81FB96B5403C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A503ED5C-C595-4B14-9A1B-81FB96B5403C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4261AE6-107E-42AA-9B6D-01E24BF1B767}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4261AE6-107E-42AA-9B6D-01E24BF1B767}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4261AE6-107E-42AA-9B6D-01E24BF1B767}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4261AE6-107E-42AA-9B6D-01E24BF1B767}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

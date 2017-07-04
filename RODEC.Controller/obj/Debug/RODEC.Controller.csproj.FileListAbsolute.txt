@@ -14,3 +14,7 @@ C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.Model.pdb
 C:\Repos\RODEC\RODEC.Controller\obj\Debug\RODEC.Controller.csprojResolveAssemblyReference.cache
 C:\Repos\RODEC\RODEC.Controller\obj\Debug\RODEC.Controller.dll
 C:\Repos\RODEC\RODEC.Controller\obj\Debug\RODEC.Controller.pdb
+C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.DAO.dll
+C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.Infra.dll
+C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.DAO.pdb
+C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.Infra.pdb
