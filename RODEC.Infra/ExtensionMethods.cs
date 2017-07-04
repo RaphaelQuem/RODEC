@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,7 +11,7 @@ namespace RODEC.Infra
 {
     public static class ExtensionMethods
     {
-        public static T ToSingleModel<T>(this IDataReader rdr)
+        public static T GetNext<T>(this SqlDataReader rdr)
         {
 
             if (rdr.Read())

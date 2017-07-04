@@ -48,6 +48,10 @@
       <Project>{A503ED5C-C595-4B14-9A1B-81FB96B5403C}</Project>
       <Name>RODEC.DAO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RODEC.Infra\RODEC.Infra.csproj">
+      <Project>{D4261AE6-107E-42AA-9B6D-01E24BF1B767}</Project>
+      <Name>RODEC.Infra</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RODEC.Model\RODEC.Model.csproj">
       <Project>{279ef28c-788c-4348-bd97-b106b3885250}</Project>
       <Name>RODEC.Model</Name>
