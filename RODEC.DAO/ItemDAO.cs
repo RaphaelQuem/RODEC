@@ -12,16 +12,17 @@ namespace RODEC.DAO
     public class ItemDAO
     {
         private SqlConnection connection;
+        private SqlDataReader reader;
         public ItemDAO (SqlConnection con)
         {
             connection = con;
         }
-        public SqlDataReader GetItemsToExport(string companyCode)
+        public void GetItemsToExport(string companyCode)
         {
             using (SqlCommand comando = connection.CreateCommand())
             {
                 comando.CommandText = " ";
-                comando.CommandText += " SELECT	CODIGO_EC5 Code, ";
+                comando.CommandText += " SELECT	CODIGO_EC5 BarCode, ";
                 comando.CommandText += "      	SITTRICMS TaxSituation, ";
                 comando.CommandText += "      	CLFISCALS FiscalClassification, ";
                 comando.CommandText += "      	DPROS Description, ";
@@ -47,7 +48,7 @@ namespace RODEC.DAO
                 comando.CommandText += " 							ON   A.CPROS = C.CPROS ";
                 comando.CommandText += "               WHERE	A.MERCS IN('JOI','REL') ";
                 comando.CommandText += " ) AS Y ";
-                comando.CommandText += " WHERE		Y.CODIGO_EC5 IS NOT NULL ";
+                comando.CommandText += " WHERE		ISNULL(Y.CODIGO_EC5,0) != 0 ";
                 comando.CommandText += " AND  		NOT EXISTS  ";
                 comando.CommandText += " ( ";
                 comando.CommandText += " 			SELECT * ";
@@ -62,9 +63,29 @@ namespace RODEC.DAO
                 comando.CommandText += "    ( Y.ETIQS ='N') ";
                 comando.CommandText += " ) ";
 
-                return comando.ExecuteReader();
+                reader = comando.ExecuteReader();
             }
 
         }
+        public Item GetNext()
+        {
+            return reader.GetNext<Item>();
+        }
+        private bool Exists(decimal barCode)
+        {
+            using (SqlCommand comando = connection.CreateCommand())
+            {
+                comando.CommandText = " SELECT  *";
+                comando.CommandText += " FROM   MCJ_PRODUTO";
+                comando.CommandText += " WHERE  \"cod_produto\" = '" + barCode + "'";
+
+                using (SqlDataReader rdr = comando.ExecuteReader())
+                {
+                    return rdr.Read();
+                }
+            }
+        }
+
+
     }
 }

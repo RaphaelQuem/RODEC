@@ -17,7 +17,7 @@ namespace RODEC.DAO
         {
             connection = con;
         }
-        public SqlDataReader GetCompaniesIn(IList<string> lojas)
+        public void GetCompaniesIn(IList<string> lojas)
         {
             using (SqlCommand comando = connection.CreateCommand())
             {
@@ -27,8 +27,12 @@ namespace RODEC.DAO
                 comando.CommandText += " WHERE  CEMPS IN ('" + string.Join("', '", lojas) + "') ";
                 comando.CommandText += " ORDER BY CEMPS";
 
-                return comando.ExecuteReader();
+                reader = comando.ExecuteReader();
             }
+        }
+        public Company GetNext()
+        {
+            return reader.GetNext<Company>();
         }
     }
 }

@@ -16,6 +16,7 @@ namespace RODEC.Controller
     {
         private CompanyDAO cpnDao;
         private ItemDAO itmDao;
+        private FiscalItemDAO fisDao;
         public void ExportItems()
         {
             try
@@ -25,12 +26,14 @@ namespace RODEC.Controller
                     using (SqlConnection rodes = new SqlConnection(cfg.ConnectionStrings["RODES"]))
                     {
                         rodes.Open();
-                        
+
 
                         cpnDao = new CompanyDAO(rodes);
                         itmDao = new ItemDAO(rodes);
+                        fisDao = new FiscalItemDAO(rodes);
 
-                        Company company = cpnDao.GetCompaniesIn(cfg.Lojas).GetNext<Company>();
+                        cpnDao.GetCompaniesIn(cfg.Lojas);
+                        Company company = cpnDao.GetNext();
                         while (company != default(Company))
                         {
 
@@ -46,109 +49,24 @@ namespace RODEC.Controller
                                     sqlCon.Open();
 
 
-                                    Item item = itmDao.GetItemsToExport(company.Code).GetNext<Item>();
+                                    itmDao.GetItemsToExport(company.Code);
+
+                                    Item item = itmDao.GetNext();
                                     while (item != default(Item))
                                     {
                                         bool atualizado = false;
 
                                         try
                                         {
-                                            SqlCommand sqlCom = sqlCon.CreateCommand();
-                                            sqlCom.CommandText = " SELECT COUNT(*) QTD";
-                                            sqlCom.CommandText += " FROM   MCJ_PRODUTO";
-                                            sqlCom.CommandText += " WHERE  \"cod_produto\" = '" + item.BarCode + "'";
-
-                                            using (IDataReader readerSql = sqlCom.ExecuteReader())
+                                            if (nfce)
                                             {
-                                                if (readerSql.Read())
-                                                {
-                                                    if (nfce)
-                                                    {
-                                                        if (Convert.ToInt32(readerSql["QTD"].ToString()) > 0)
-                                                        {
-                                                            sqlCom.CommandText = " UPDATE MCJ_PRODUTO ";
-                                                            sqlCom.CommandText += " SET         \"descricao\"                         = '" + item.Description + "',";
-                                                            sqlCom.CommandText += "             \"preco_unitario\"                    = NULL,";
-                                                            sqlCom.CommandText += "             \"id_mcj_situacao_tributaria\"        = 1,";
-                                                            sqlCom.CommandText += "             \"perc_carga_tributaria_federal\"     = 9,";
-                                                            sqlCom.CommandText += "             \"fl_pis_cofins\"                     = 1,";
-                                                            sqlCom.CommandText += "             \"perc_carga_tributaria_estadual\"    = " + perc.ToString() + ",";
-                                                            sqlCom.CommandText += "             \"perc_cargatributaria_municipal\"    = 5,";
-                                                            sqlCom.CommandText += "             \"cod_ncm\"                           = '" + item.FiscalClassification + "',";
-                                                            sqlCom.CommandText += "             \"ex_tipi\"                           = 0,";
-                                                            sqlCom.CommandText += "             \"set_origem_produto\"                = 0,";
-                                                            sqlCom.CommandText += "             \"cod_cest\"                          = NULL,";
-                                                            sqlCom.CommandText += "             \"perc_carga_tributaria\"             = NULL";
-                                                            sqlCom.CommandText += " WHERE       \"cod_produto\"                       = '" + item.BarCode + "'";
-                                                        }
-                                                        else
-                                                        {
-                                                            sqlCom.CommandText = " INSERT INTO MCJ_PRODUTO( ";
-                                                            sqlCom.CommandText += "       \"cod_produto\", ";
-                                                            sqlCom.CommandText += "       \"descricao\", ";
-                                                            sqlCom.CommandText += "       \"preco_unitario\", ";
-                                                            sqlCom.CommandText += "       \"id_mcj_situacao_tributaria\", ";
-                                                            sqlCom.CommandText += "       \"perc_carga_tributaria_federal\", ";
-                                                            sqlCom.CommandText += "       \"fl_pis_cofins\", ";
-                                                            sqlCom.CommandText += "       \"perc_carga_tributaria_estadual\", ";
-                                                            sqlCom.CommandText += "       \"perc_cargatributaria_municipal\", ";
-                                                            sqlCom.CommandText += "       \"cod_ncm\", ";
-                                                            sqlCom.CommandText += "       \"ex_tipi\", ";
-                                                            sqlCom.CommandText += "       \"set_origem_produto\", ";
-                                                            sqlCom.CommandText += "       \"cod_cest\", ";
-                                                            sqlCom.CommandText += "       \"perc_carga_tributaria\" ";
-                                                            sqlCom.CommandText += "        ) ";
-                                                            sqlCom.CommandText += " VALUES('" + item.BarCode + "', ";
-                                                            sqlCom.CommandText += "        '" + item.Description + "', ";
-                                                            sqlCom.CommandText += "        NULL, ";
-                                                            sqlCom.CommandText += "        1, ";
-                                                            sqlCom.CommandText += "        9, ";
-                                                            sqlCom.CommandText += "        1, ";
-                                                            sqlCom.CommandText += "        " + perc.ToString() + ", ";
-                                                            sqlCom.CommandText += "        5, ";
-                                                            sqlCom.CommandText += "        '" + item.FiscalClassification + "', ";
-                                                            sqlCom.CommandText += "        0, ";
-                                                            sqlCom.CommandText += "        0, ";
-                                                            sqlCom.CommandText += "        NULL, ";
-                                                            sqlCom.CommandText += "        NULL)";
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        if (Convert.ToInt32(readerSql["QTD"].ToString()) > 0)
-                                                        {
-
-                                                            sqlCom.CommandText = " UPDATE MCJ_PRODUTO ";
-                                                            sqlCom.CommandText += " SET         \"descricao\"                         = '" + item.Description + "',";
-                                                            sqlCom.CommandText += "             \"id_mcj_situacao_tributaria\"        = 1,";
-                                                            sqlCom.CommandText += "             \"perc_carga_tributaria_federal\"     = " + (item.TaxSituation.ToString().Trim().Equals(string.Empty) ? "1" : item.TaxSituation.ToString().Trim()) + "";
-                                                            sqlCom.CommandText += " WHERE       \"cod_produto\"                       = '" + item.BarCode + "'";
-                                                        }
-                                                        else
-                                                        {
-                                                            sqlCom.CommandText = " INSERT INTO MCJ_PRODUTO( ";
-                                                            sqlCom.CommandText += "       \"cod_produto\", ";
-                                                            sqlCom.CommandText += "       \"descricao\", ";
-                                                            sqlCom.CommandText += "       \"preco_unitario\", ";
-                                                            sqlCom.CommandText += "       \"id_mcj_situacao_tributaria\", ";
-                                                            sqlCom.CommandText += "       \"perc_carga_tributaria_federal\", ";
-                                                            sqlCom.CommandText += "       \"fl_pis_cofins\" ";
-                                                            sqlCom.CommandText += "        ) ";
-                                                            sqlCom.CommandText += " VALUES('" + item.BarCode + "', ";
-                                                            sqlCom.CommandText += "        '" + item.Description + "', ";
-                                                            sqlCom.CommandText += "        NULL, ";
-                                                            sqlCom.CommandText += "        1,";
-                                                            sqlCom.CommandText += "        " + (item.TaxSituation.ToString().Trim().Equals(string.Empty) ? "1" : item.TaxSituation.ToString().Trim()) + ", ";
-                                                            sqlCom.CommandText += "        1)";
-                                                        }
-                                                    }
-                                                }
-
+                                                fisDao.SaveNFCE(item);
                                             }
-
-                                            sqlCom.ExecuteNonQuery();
+                                            else
+                                            {
+                                                fisDao.Save(item);
+                                            }
                                             atualizado = true;
-
 
                                         }
                                         catch (Exception ex)
@@ -184,7 +102,8 @@ namespace RODEC.Controller
 
                                             }
                                         }
-                                        item = itmDao.GetItemsToExport(company.Code).GetNext<Item>();
+
+                                        item = itmDao.GetNext();
                                         Console.WriteLine("LOJA:" + company.Code + " #" + (iterador++).ToString());
                                     }
 
@@ -197,7 +116,7 @@ namespace RODEC.Controller
 
                                 Console.WriteLine(ex.Message);
                             }
-                            company = cpnDao.GetCompaniesIn(cfg.Lojas).GetNext<Company>();
+                            company = cpnDao.GetNext();
                         }
                     }
                 }
