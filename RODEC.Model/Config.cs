@@ -18,7 +18,7 @@ namespace RODEC.Modelo
         public Dictionary<string, string> ConnectionStrings { get; set; }
         public IList<string> Lojas { get; set; }
         public IList<string> LojasNFCE { get; set; }
-        public Dictionary<string, double> AliquotasEstaduais { get; set; }
+        public Dictionary<string, decimal> AliquotasEstaduais { get; set; }
 
         public void Dispose()
         {

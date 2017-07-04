@@ -30,32 +30,30 @@ namespace RODEC.Controller
 
                         cpnDao = new CompanyDAO(rodes);
                         itmDao = new ItemDAO(rodes);
-                        fisDao = new FiscalItemDAO(rodes);
 
                         cpnDao.GetCompaniesIn(cfg.Lojas);
+
                         Company company = cpnDao.GetNext();
                         while (company != default(Company))
                         {
-
                             int iterador = 0;
-                            double perc = cfg.AliquotasEstaduais[company.State];
+                            decimal perc = cfg.AliquotasEstaduais[company.State];
                             bool nfce = cfg.LojasNFCE.Contains(company.Code);
 
                             try
                             {
-
                                 using (SqlConnection sqlCon = new SqlConnection(cfg.ConnectionStrings[company.Code]))
                                 {
                                     sqlCon.Open();
 
-
+                                    fisDao = new FiscalItemDAO(sqlCon);
                                     itmDao.GetItemsToExport(company.Code);
 
                                     Item item = itmDao.GetNext();
                                     while (item != default(Item))
                                     {
                                         bool atualizado = false;
-
+                                        item.Percentage = perc;
                                         try
                                         {
                                             if (nfce)
