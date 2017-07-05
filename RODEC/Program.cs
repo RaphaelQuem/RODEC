@@ -18,8 +18,8 @@ namespace RODEC
             exportingThread = new Thread(controller.ExportItems);
             exportingThread.Start();
 
-            while(true)
-            Console.Write("x");
+            while(exportingThread.IsAlive)
+                Console.Write("x");
         }
     }
 }

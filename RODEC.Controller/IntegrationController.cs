@@ -17,6 +17,7 @@ namespace RODEC.Controller
         private CompanyDAO cpnDao;
         private ItemDAO itmDao;
         private FiscalItemDAO fisDao;
+        private ExportedItemDAO expDao;
         public void ExportItems()
         {
             try
@@ -30,6 +31,7 @@ namespace RODEC.Controller
 
                         cpnDao = new CompanyDAO(rodes);
                         itmDao = new ItemDAO(rodes);
+                        expDao = new ExportedItemDAO(rodes);
 
                         cpnDao.GetCompaniesIn(cfg.Lojas);
 
@@ -77,23 +79,7 @@ namespace RODEC.Controller
                                         {
                                             try
                                             {
-                                                SqlCommand sqlConfirm = rodes.CreateCommand();
-
-                                                sqlConfirm.CommandText = "";
-                                                sqlConfirm.CommandText += " INSERT INTO SIGECETQ ";
-                                                sqlConfirm.CommandText += " ( ";
-                                                sqlConfirm.CommandText += "     \"cbars\", ";
-                                                sqlConfirm.CommandText += "     \"cidchaves\", ";
-                                                sqlConfirm.CommandText += "     \"emps\" ";
-                                                sqlConfirm.CommandText += " ) ";
-                                                sqlConfirm.CommandText += " VALUES ";
-                                                sqlConfirm.CommandText += " ( ";
-                                                sqlConfirm.CommandText += "     '" + item.BarCode + "', ";
-                                                sqlConfirm.CommandText += "     '" + company.Code + item.BarCode + "', ";
-                                                sqlConfirm.CommandText += "     '" + company.Code + "' ";
-                                                sqlConfirm.CommandText += " );";
-
-                                                sqlConfirm.ExecuteNonQuery();
+                                                expDao.Insert(item);                                                
                                             }
                                             catch
                                             {
