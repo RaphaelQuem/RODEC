@@ -17,53 +17,55 @@ namespace RODEC.DAO
         {
             connection = con;
         }
-        public void GetItemsToExport(string companyCode)
+        public List<Item> GetItemsToExport(string companyCode)
         {
             using (SqlCommand comando = connection.CreateCommand())
             {
                 comando.CommandText = " ";
-                comando.CommandText += " SELECT	CODIGO_EC5 BarCode, ";
-                comando.CommandText += "      	SITTRICMS TaxSituation, ";
-                comando.CommandText += "      	CLFISCALS FiscalClassification, ";
-                comando.CommandText += "      	DPROS Description, ";
-                comando.CommandText += "      	ETIQS SingleLabel, ";
-                comando.CommandText += "      	EMPS CompanyCode ";
-                comando.CommandText += " FROM  ";
-                comando.CommandText += " ( ";
-                comando.CommandText += "              SELECT	DISTINCT	CASE B.ETIQS ";
-                comando.CommandText += " 										WHEN 'S' THEN C.CBARS ";
-                comando.CommandText += " 										ELSE A.cbars ";
-                comando.CommandText += " 									END CODIGO_EC5, ";
-                comando.CommandText += " 									ISNULL(A.SITTRICMS,'1') SITTRICMS,  ";
-                comando.CommandText += " 						          	A.CLFISCALS,   ";
-                comando.CommandText += " 									A.DPROS, ";
-                comando.CommandText += " 									ISNULL(B.ETIQS,'N') ETIQS, ";
-                comando.CommandText += " 									C.EMPS ";
-                comando.CommandText += "               FROM	    SIGCDPRO AS A WITH (NOLOCK)";
-                comando.CommandText += " 						INNER  JOIN ";
-                comando.CommandText += " 						SIGCDUNI AS B WITH (NOLOCK) ";
-                comando.CommandText += " 							ON A.CUNIS = B.CUNIS ";
-                comando.CommandText += " 						LEFT JOIN ";
-                comando.CommandText += " 						SIGOPETQ AS C WITH (NOLOCK) ";
-                comando.CommandText += " 							ON   A.CPROS = C.CPROS ";
-                comando.CommandText += "               WHERE	A.MERCS IN('JOI','REL') ";
-                comando.CommandText += " ) AS Y ";
-                comando.CommandText += " WHERE		ISNULL(Y.CODIGO_EC5,0) != 0 ";
-                comando.CommandText += " AND  		NOT EXISTS  ";
-                comando.CommandText += " ( ";
-                comando.CommandText += " 			SELECT * ";
-                comando.CommandText += " 			FROM SIGECETQ AS X ";
-                comando.CommandText += " 			WHERE X.CBARS  = CAST(Y.CODIGO_EC5 AS CHAR) ";
-                comando.CommandText += " 			AND   X.EMPS  = '" + companyCode + "' ";
-                comando.CommandText += " ) ";
-                comando.CommandText += " AND ";
-                comando.CommandText += " ( ";
-                comando.CommandText += "    ( Y.ETIQS ='S' AND  Y.EMPS= '" + companyCode + "') ";
-                comando.CommandText += "        OR ";
-                comando.CommandText += "    ( Y.ETIQS ='N') ";
-                comando.CommandText += " ) ";
+                comando.CommandText += " SELECT	TOP 100 CODIGO_EC5 BarCode, " + Environment.NewLine;
+                comando.CommandText += "      	SITTRICMS TaxSituation, " + Environment.NewLine;
+                comando.CommandText += "      	CLFISCALS FiscalClassification, " + Environment.NewLine;
+                comando.CommandText += "      	DPROS Description, " + Environment.NewLine;
+                comando.CommandText += "      	ETIQS SingleLabel, " + Environment.NewLine;
+                comando.CommandText += "      	EMPS CompanyCode " + Environment.NewLine;
+                comando.CommandText += " FROM  " + Environment.NewLine;
+                comando.CommandText += " ( " + Environment.NewLine;
+                comando.CommandText += "              SELECT	DISTINCT	CASE B.ETIQS " + Environment.NewLine;
+                comando.CommandText += " 										WHEN 'S' THEN C.CBARS " + Environment.NewLine;
+                comando.CommandText += " 										ELSE A.cbars " + Environment.NewLine;
+                comando.CommandText += " 									END CODIGO_EC5, " + Environment.NewLine;
+                comando.CommandText += " 									ISNULL(A.SITTRICMS,'1') SITTRICMS,  " + Environment.NewLine;
+                comando.CommandText += " 						          	A.CLFISCALS,   " + Environment.NewLine;
+                comando.CommandText += " 									A.DPROS, " + Environment.NewLine;
+                comando.CommandText += " 									ISNULL(B.ETIQS,'N') ETIQS, " + Environment.NewLine;
+                comando.CommandText += " 									C.EMPS " + Environment.NewLine;
+                comando.CommandText += "               FROM	    SIGCDPRO AS A WITH (NOLOCK)" + Environment.NewLine;
+                comando.CommandText += " 						INNER  JOIN " + Environment.NewLine;
+                comando.CommandText += " 						SIGCDUNI AS B WITH (NOLOCK) " + Environment.NewLine;
+                comando.CommandText += " 							ON A.CUNIS = B.CUNIS " + Environment.NewLine;
+                comando.CommandText += " 						LEFT JOIN " + Environment.NewLine;
+                comando.CommandText += " 						SIGOPETQ AS C WITH (NOLOCK) " + Environment.NewLine;
+                comando.CommandText += " 							ON   A.CPROS = C.CPROS " + Environment.NewLine;
+                comando.CommandText += "               WHERE	A.MERCS IN('JOI','REL') " + Environment.NewLine;
+                comando.CommandText += " ) AS Y " + Environment.NewLine;
+                comando.CommandText += " WHERE		ISNULL(Y.CODIGO_EC5,0) != 0 " + Environment.NewLine;
+                comando.CommandText += " AND  		NOT EXISTS  " + Environment.NewLine;
+                comando.CommandText += " ( " + Environment.NewLine;
+                comando.CommandText += " 			SELECT * " + Environment.NewLine;
+                comando.CommandText += " 			FROM SIGECETQ AS X " + Environment.NewLine;
+                comando.CommandText += " 			WHERE X.CBARS  = CAST(Y.CODIGO_EC5 AS CHAR) " + Environment.NewLine;
+                comando.CommandText += " 			AND   X.EMPS  = '" + companyCode + "' " + Environment.NewLine;
+                comando.CommandText += " ) " + Environment.NewLine;
+                comando.CommandText += " AND " + Environment.NewLine;
+                comando.CommandText += " ( " + Environment.NewLine;
+                comando.CommandText += "    ( Y.ETIQS ='S' AND  Y.EMPS= '" + companyCode + "') " + Environment.NewLine;
+                comando.CommandText += "        OR " + Environment.NewLine;
+                comando.CommandText += "    ( Y.ETIQS ='N') " + Environment.NewLine;
+                comando.CommandText += " )  " + Environment.NewLine;
 
                 reader = comando.ExecuteReader();
+
+                return reader.ToModel<Item>();
             }
 
         }

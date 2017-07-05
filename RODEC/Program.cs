@@ -11,15 +11,11 @@ namespace RODEC
     class Program
     {
         static IntegrationController controller = new IntegrationController();
-        private static Thread exportingThread;
         IList<string> connectionStrings = new List<string>();
         static void Main(string[] args)
         {
-            exportingThread = new Thread(controller.ExportItems);
-            exportingThread.Start();
-
-            while(exportingThread.IsAlive)
-                Console.Write("y");
+            while(true)
+                controller.ExportItems();
         }
     }
 }

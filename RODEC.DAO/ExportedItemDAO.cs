@@ -28,7 +28,7 @@ namespace RODEC.DAO
                 comando.CommandText += " ) ";
                 comando.CommandText += " VALUES ";
                 comando.CommandText += " ( ";
-                comando.CommandText += "     '" + item.BarCode + "', ";
+                comando.CommandText += "     " + item.BarCode + ", ";
                 comando.CommandText += "     '" + item.CompanyCode + item.BarCode + "', ";
                 comando.CommandText += "     '" + item.CompanyCode + "' ";
                 comando.CommandText += " );";

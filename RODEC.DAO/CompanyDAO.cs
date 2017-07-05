@@ -17,7 +17,7 @@ namespace RODEC.DAO
         {
             connection = con;
         }
-        public void GetCompaniesIn(IList<string> lojas)
+        public List<Company> GetCompaniesIn(IList<string> lojas)
         {
             using (SqlCommand comando = connection.CreateCommand())
             {
@@ -28,6 +28,8 @@ namespace RODEC.DAO
                 comando.CommandText += " ORDER BY CEMPS";
 
                 reader = comando.ExecuteReader();
+
+                return reader.ToModel<Company>();
             }
         }
         public Company GetNext()

@@ -24,85 +24,93 @@ namespace RODEC.Controller
             {
                 using (Config cfg = Config.GetConfig())
                 {
+                    List<Task> tasks = new List<Task>();
                     using (SqlConnection rodes = new SqlConnection(cfg.ConnectionStrings["RODES"]))
                     {
                         rodes.Open();
 
 
                         cpnDao = new CompanyDAO(rodes);
+                        
+
+
+                        foreach (Company company in cpnDao.GetCompaniesIn(cfg.Lojas))
+                        {
+                             tasks.Add(Task.Factory.StartNew(() => { ExportCompanyItems(company.Clone(), cfg); }));
+                        }
+
+                    }
+                    Task.WaitAll(tasks.ToArray());
+
+                }
+                
+
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+        }
+        private void ExportCompanyItems(Company company, Config cfg)
+        {
+            try
+            {
+                using (SqlConnection rodes = new SqlConnection(cfg.ConnectionStrings["RODES"]))
+                {
+                    rodes.Open();
+                    using (SqlConnection sqlCon = new SqlConnection(cfg.ConnectionStrings[company.Code]))
+                    {
+                        sqlCon.Open();
+
+                        fisDao = new FiscalItemDAO(sqlCon);
                         itmDao = new ItemDAO(rodes);
                         expDao = new ExportedItemDAO(rodes);
 
-                        cpnDao.GetCompaniesIn(cfg.Lojas);
+                        decimal perc = cfg.AliquotasEstaduais[company.State];
+                        bool nfce = cfg.LojasNFCE.Contains(company.Code);
 
-                        Company company = cpnDao.GetNext();
-                        while (company != default(Company))
-                        {
-                            int iterador = 0;
-                            decimal perc = cfg.AliquotasEstaduais[company.State];
-                            bool nfce = cfg.LojasNFCE.Contains(company.Code);
-
+                        foreach(Item item in itmDao.GetItemsToExport(company.Code))
+                        { 
+                            bool atualizado = false;
+                            item.Percentage = perc;
                             try
                             {
-                                using (SqlConnection sqlCon = new SqlConnection(cfg.ConnectionStrings[company.Code]))
+                                if (nfce)
                                 {
-                                    sqlCon.Open();
-
-                                    fisDao = new FiscalItemDAO(sqlCon);
-                                    itmDao.GetItemsToExport(company.Code);
-
-                                    Item item = itmDao.GetNext();
-                                    while (item != default(Item))
-                                    {
-                                        bool atualizado = false;
-                                        item.Percentage = perc;
-                                        try
-                                        {
-                                            if (nfce)
-                                            {
-                                                fisDao.SaveNFCE(item);
-                                            }
-                                            else
-                                            {
-                                                fisDao.Save(item);
-                                            }
-                                            atualizado = true;
-
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Console.WriteLine(ex.Message);
-                                            atualizado = false;
-
-                                        }
-                                        if (atualizado)
-                                        {
-                                            try
-                                            {
-                                                expDao.Insert(item);                                                
-                                            }
-                                            catch
-                                            {
-
-                                            }
-                                        }
-
-                                        item = itmDao.GetNext();
-                                        Console.WriteLine("LOJA:" + company.Code + " #" + (iterador++).ToString());
-                                    }
-
+                                    fisDao.SaveNFCE(item);
                                 }
-                                Console.WriteLine("########## LOJA " + company.Code + " FINALIZADA ##########");
+                                else
+                                {
+                                    fisDao.Save(item);
+                                }
+                                atualizado = true;
 
                             }
                             catch (Exception ex)
                             {
-
                                 Console.WriteLine(ex.Message);
+                                atualizado = false;
+
                             }
-                            company = cpnDao.GetNext();
+                            if (atualizado)
+                            {
+                                try
+                                {
+                                    expDao.Insert(item);
+                                }
+                                catch(Exception  ex)
+                                {
+
+                                }
+                            }
+                            Console.WriteLine("LOJA:" + company.Code + " ITEM: " + item.BarCode);
+                            // Console.WriteLine("LOJA:" + company.Code + " #" + (iterador++).ToString());
                         }
+
                     }
+                    Console.WriteLine("########## LOJA " + company.Code + " FINALIZADA ##########");
+
                 }
             }
             catch (Exception ex)
