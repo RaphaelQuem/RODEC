@@ -104,8 +104,7 @@ namespace RODEC.Controller
 
                                 }
                             }
-                            Console.WriteLine("LOJA:" + company.Code + " ITEM: " + item.BarCode);
-                            // Console.WriteLine("LOJA:" + company.Code + " #" + (iterador++).ToString());
+                            Console.WriteLine("LOJA:" + company.Code + " ITEM: " + item.BarCode);                            
                         }
 
                     }
