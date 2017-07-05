@@ -19,7 +19,7 @@ namespace RODEC
             exportingThread.Start();
 
             while(exportingThread.IsAlive)
-                Console.Write("x");
+                Console.Write("y");
         }
     }
 }

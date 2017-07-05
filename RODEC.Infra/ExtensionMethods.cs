@@ -26,9 +26,7 @@ namespace RODEC.Infra
                         else
                             info.SetValue(obj, rdr[info.Name]);
                     }
-                    catch(Exception ex)
-                    {
-                    }
+                    catch { }
                 }
                 return obj;
             }
