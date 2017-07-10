@@ -14,10 +14,6 @@ namespace RODEC.Controller
 {
     public class IntegrationController
     {
-        private CompanyDAO cpnDao;
-        private ItemDAO itmDao;
-        private FiscalItemDAO fisDao;
-        private ExportedItemDAO expDao;
         public void ExportItems()
         {
             try
@@ -30,7 +26,7 @@ namespace RODEC.Controller
                         rodes.Open();
 
 
-                        cpnDao = new CompanyDAO(rodes);
+                        CompanyDAO cpnDao = new CompanyDAO(rodes);
                         
 
 
@@ -56,6 +52,9 @@ namespace RODEC.Controller
         {
             try
             {
+                ItemDAO itmDao;
+                FiscalItemDAO fisDao;
+                ExportedItemDAO expDao;
                 using (SqlConnection rodes = new SqlConnection(cfg.ConnectionStrings["RODES"]))
                 {
                     rodes.Open();
@@ -89,7 +88,7 @@ namespace RODEC.Controller
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine(ex.Message);
+                                Console.WriteLine(company.Code + ": " + ex.Message);
                                 atualizado = false;
 
                             }
@@ -99,7 +98,7 @@ namespace RODEC.Controller
                                 {
                                     expDao.Insert(item);
                                 }
-                                catch(Exception  ex)
+                                catch
                                 {
 
                                 }

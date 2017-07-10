@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RODEC.DAO", "RODEC.DAO\RODE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RODEC.Infra", "RODEC.Infra\RODEC.Infra.csproj", "{D4261AE6-107E-42AA-9B6D-01E24BF1B767}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RODEC.View", "RODEC.View\RODEC.View.csproj", "{FE096A6F-8C22-4BB7-A838-73518FA55FCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D4261AE6-107E-42AA-9B6D-01E24BF1B767}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4261AE6-107E-42AA-9B6D-01E24BF1B767}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4261AE6-107E-42AA-9B6D-01E24BF1B767}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE096A6F-8C22-4BB7-A838-73518FA55FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE096A6F-8C22-4BB7-A838-73518FA55FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE096A6F-8C22-4BB7-A838-73518FA55FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE096A6F-8C22-4BB7-A838-73518FA55FCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,6 +17,7 @@ namespace RODEC.DAO
         }
         private bool Exists(decimal barCode)
         {
+
             using (SqlCommand comando = connection.CreateCommand())
             {
                 comando.CommandText = " SELECT  *";

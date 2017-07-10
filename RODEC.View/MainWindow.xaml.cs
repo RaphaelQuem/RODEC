@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RODEC.Controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,15 @@ namespace RODEC.View
     /// </summary>
     public partial class MainWindow : Window
     {
+        IntegrationController controller = new IntegrationController();
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            controller.ExportItems();
         }
     }
 }
