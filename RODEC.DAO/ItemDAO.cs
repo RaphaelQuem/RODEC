@@ -22,12 +22,12 @@ namespace RODEC.DAO
             using (SqlCommand comando = connection.CreateCommand())
             {
                 comando.CommandText = " ";
-                comando.CommandText += " SELECT	TOP 100 CODIGO_EC5 BarCode, " + Environment.NewLine;
+                comando.CommandText += " SELECT	DISTINCT TOP 100 CODIGO_EC5 BarCode, " + Environment.NewLine;
                 comando.CommandText += "      	SITTRICMS TaxSituation, " + Environment.NewLine;
                 comando.CommandText += "      	CLFISCALS FiscalClassification, " + Environment.NewLine;
                 comando.CommandText += "      	DPROS Description, " + Environment.NewLine;
                 comando.CommandText += "      	ETIQS SingleLabel, " + Environment.NewLine;
-                comando.CommandText += "      	EMPS CompanyCode " + Environment.NewLine;
+                comando.CommandText += "      	'" + companyCode + "' CompanyCode " + Environment.NewLine;
                 comando.CommandText += " FROM  " + Environment.NewLine;
                 comando.CommandText += " ( " + Environment.NewLine;
                 comando.CommandText += "              SELECT	DISTINCT	CASE B.ETIQS " + Environment.NewLine;

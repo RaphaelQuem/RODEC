@@ -38,9 +38,9 @@ namespace RODEC.Controller
                         {
                              tasks.Add(Task.Factory.StartNew(() => { ExportCompanyItems(company.Clone(), cfg); }));
                         }
-
+                        Task.WaitAll(tasks.ToArray());
                     }
-                    Task.WaitAll(tasks.ToArray());
+                    
 
                 }
                 
@@ -115,7 +115,7 @@ namespace RODEC.Controller
             catch (Exception ex)
             {
 
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(company.Code  + ": " + ex.Message);
             }
         }
     }

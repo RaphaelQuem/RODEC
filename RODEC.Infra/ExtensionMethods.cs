@@ -56,7 +56,7 @@ namespace RODEC.Infra
                 objlist.Add(obj);
             }
 
-            return objlist.Count.Equals(0) ? null : objlist;
+            return objlist;
         }
     }
 }
