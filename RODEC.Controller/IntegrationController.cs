@@ -14,6 +14,20 @@ namespace RODEC.Controller
 {
     public class IntegrationController
     {
+        public void Export()
+        {
+            try
+            {
+                string loja;
+                List<Task> tasks = new List<Task>();
+                Task.Factory.StartNew(() => ExportItems());
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+        }
         public void ExportItems()
         {
             try
@@ -25,21 +39,19 @@ namespace RODEC.Controller
                     {
                         rodes.Open();
 
-
                         CompanyDAO cpnDao = new CompanyDAO(rodes);
-                        
-
 
                         foreach (Company company in cpnDao.GetCompaniesIn(cfg.Lojas))
                         {
-                             tasks.Add(Task.Factory.StartNew(() => { ExportCompanyItems(company.Clone(), cfg); }));
+                            tasks.Add(Task.Factory.StartNew(() => { ExportCompanyItems(company.Clone(), cfg); }));
                         }
+
                         Task.WaitAll(tasks.ToArray());
                     }
-                    
+
 
                 }
-                
+
 
             }
             catch (Exception ex)
@@ -69,8 +81,8 @@ namespace RODEC.Controller
                         decimal perc = cfg.AliquotasEstaduais[company.State];
                         bool nfce = cfg.LojasNFCE.Contains(company.Code);
 
-                        foreach(Item item in itmDao.GetItemsToExport(company.Code))
-                        { 
+                        foreach (Item item in itmDao.GetItemsToExport(company.Code))
+                        {
                             bool atualizado = false;
                             item.Percentage = perc;
                             try
@@ -103,7 +115,7 @@ namespace RODEC.Controller
 
                                 }
                             }
-                            Console.WriteLine("LOJA:" + company.Code + " ITEM: " + item.BarCode);                            
+                            Console.WriteLine("LOJA:" + company.Code + " ITEM: " + item.BarCode);
                         }
 
                     }
@@ -114,7 +126,103 @@ namespace RODEC.Controller
             catch (Exception ex)
             {
 
-                Console.WriteLine(company.Code  + ": " + ex.Message);
+                Console.WriteLine(company.Code + ": " + ex.Message);
+            }
+        }
+        public void ExportSingle(string companycodes, string itemcode)
+        {
+            try
+            {
+                Task.Factory.StartNew(() => ExportSingleItem(companycodes, itemcode));
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
+        }
+        public void ExportSingleItem(string companycodes, string itemcode)
+        {
+            try
+            {
+                using (Config cfg = Config.GetConfig())
+                {
+                    string parameters = Console.ReadLine();
+
+                    ItemDAO itmDao;
+                    FiscalItemDAO fisDao;
+                    ExportedItemDAO expDao;
+                    CompanyDAO cpnDao;
+
+                    using (SqlConnection rodes = new SqlConnection(cfg.ConnectionStrings["RODES"]))
+                    {
+                        rodes.Open();
+
+                        cpnDao = new CompanyDAO(rodes);
+                        foreach (Company company in cpnDao.GetCompaniesIn(companycodes.Split(',')))
+                        {
+
+                            using (SqlConnection sqlCon = new SqlConnection(cfg.ConnectionStrings[company.Code]))
+                            {
+                                sqlCon.Open();
+
+
+                                fisDao = new FiscalItemDAO(sqlCon);
+                                itmDao = new ItemDAO(rodes);
+                                expDao = new ExportedItemDAO(rodes);
+
+
+
+
+                                decimal perc = cfg.AliquotasEstaduais[company.State];
+                                bool nfce = cfg.LojasNFCE.Contains(company.Code);
+
+                                foreach (Item item in itmDao.GetItemsToExport(company.Code))
+                                {
+                                    bool atualizado = false;
+                                    item.Percentage = perc;
+                                    try
+                                    {
+                                        if (nfce)
+                                        {
+                                            fisDao.SaveNFCE(item);
+                                        }
+                                        else
+                                        {
+                                            fisDao.Save(item);
+                                        }
+                                        atualizado = true;
+
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine(company.Code + ": " + ex.Message);
+                                        atualizado = false;
+
+                                    }
+                                    if (atualizado)
+                                    {
+                                        try
+                                        {
+                                            expDao.Insert(item);
+                                        }
+                                        catch
+                                        {
+
+                                        }
+                                    }
+                                    Console.WriteLine("LOJA:" + company.Code + " ITEM: " + item.BarCode);
+                                }
+                            }
+                            Console.WriteLine("########## LOJA " + company.Code + " FINALIZADA ##########");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine( ex.Message);
             }
         }
     }

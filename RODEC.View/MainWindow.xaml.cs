@@ -29,7 +29,12 @@ namespace RODEC.View
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            controller.ExportItems();
+            controller.Export();
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            controller.ExportSingle(textBox1.Text,textBox.Text);
         }
     }
 }

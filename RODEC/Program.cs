@@ -14,8 +14,11 @@ namespace RODEC
         IList<string> connectionStrings = new List<string>();
         static void Main(string[] args)
         {
-            while(true)
-                controller.ExportItems();
+            while (true)
+            {
+                controller.Export();
+                
+            }
         }
     }
 }
