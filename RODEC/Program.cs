@@ -1,4 +1,5 @@
 ﻿using RODEC.Controller;
+using RODEC.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace RODEC
 {
     class Program
     {
-        static IntegrationController controller = new IntegrationController();
+        static IntegrationController controller = new IntegrationController(new MonitorVM());
         IList<string> connectionStrings = new List<string>();
         static void Main(string[] args)
         {

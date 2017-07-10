@@ -1,4 +1,5 @@
 ﻿using RODEC.Controller;
+using RODEC.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,20 +22,40 @@ namespace RODEC.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        IntegrationController controller = new IntegrationController();
+        IntegrationController controller;
+        System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+
+        public MonitorVM ViewModel
+        {
+            get { return DataContext as MonitorVM; }
+            set { DataContext = value; }
+        }
         public MainWindow()
         {
             InitializeComponent();
+            ViewModel = new MonitorVM();
+            controller = new IntegrationController(ViewModel);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Start();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void btnExportClick(object sender, RoutedEventArgs e)
         {
             controller.Export();
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void btnExportSingleClick(object sender, RoutedEventArgs e)
         {
-            controller.ExportSingle(textBox1.Text,textBox.Text);
+
+            controller.ExportSingle(textBox1.Text, textBox.Text);
         }
+
+        private void btnStopClick(object sender, RoutedEventArgs e)
+        {
+            ViewModel.Status = "Parando...";
+            ViewModel.CanStop = false;
+            ViewModel.CanRun = false;
+        }
+          
     }
 }

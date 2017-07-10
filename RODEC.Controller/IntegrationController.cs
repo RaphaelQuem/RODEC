@@ -2,6 +2,7 @@
 using RODEC.Infra;
 using RODEC.Model;
 using RODEC.Modelo;
+using RODEC.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,50 +15,59 @@ namespace RODEC.Controller
 {
     public class IntegrationController
     {
+        MonitorVM viewmodel;
+        public IntegrationController(MonitorVM vm)
+        {
+            viewmodel = vm;
+        }
         public void Export()
         {
             try
             {
-                string loja;
-                List<Task> tasks = new List<Task>();
+                viewmodel.Status = "Rodando";
+                viewmodel.CanRun = false;
+                viewmodel.CanStop = true;
                 Task.Factory.StartNew(() => ExportItems());
             }
             catch (Exception ex)
             {
 
-                Console.WriteLine(ex.Message);
+                viewmodel.StringLogs += Environment.NewLine + (ex.Message);
             }
         }
         public void ExportItems()
         {
             try
             {
-                using (Config cfg = Config.GetConfig())
+                while (viewmodel.Status.Equals("Rodando"))
                 {
-                    List<Task> tasks = new List<Task>();
-                    using (SqlConnection rodes = new SqlConnection(cfg.ConnectionStrings["RODES"]))
+                    using (Config cfg = Config.GetConfig())
                     {
-                        rodes.Open();
-
-                        CompanyDAO cpnDao = new CompanyDAO(rodes);
-
-                        foreach (Company company in cpnDao.GetCompaniesIn(cfg.Lojas))
+                        List<Task> tasks = new List<Task>();
+                        using (SqlConnection rodes = new SqlConnection(cfg.ConnectionStrings["RODES"]))
                         {
-                            tasks.Add(Task.Factory.StartNew(() => { ExportCompanyItems(company.Clone(), cfg); }));
+                            rodes.Open();
+
+                            CompanyDAO cpnDao = new CompanyDAO(rodes);
+
+                            foreach (Company company in cpnDao.GetCompaniesIn(cfg.Lojas))
+                            {
+                                tasks.Add(Task.Factory.StartNew(() => { ExportCompanyItems(company.Clone(), cfg); }));
+                            }
+
+                            Task.WaitAll(tasks.ToArray());
                         }
-
-                        Task.WaitAll(tasks.ToArray());
                     }
-
-
                 }
-
+                viewmodel.Status = "Parado";
+                viewmodel.CanRun = true;
+                viewmodel.CanStop = false;
 
             }
             catch (Exception ex)
             {
 
-                Console.WriteLine(ex.Message);
+                viewmodel.StringLogs += Environment.NewLine + (ex.Message);
             }
         }
         private void ExportCompanyItems(Company company, Config cfg)
@@ -100,7 +110,7 @@ namespace RODEC.Controller
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine(company.Code + ": " + ex.Message);
+                                viewmodel.StringLogs += Environment.NewLine + (company.Code + ": " + ex.Message);
                                 atualizado = false;
 
                             }
@@ -115,18 +125,19 @@ namespace RODEC.Controller
 
                                 }
                             }
-                            Console.WriteLine("LOJA:" + company.Code + " ITEM: " + item.BarCode);
+                            viewmodel.StringLogs += Environment.NewLine + ("LOJA:" + company.Code + " ITEM: " + item.BarCode);
                         }
 
                     }
-                    Console.WriteLine("########## LOJA " + company.Code + " FINALIZADA ##########");
+                    viewmodel.StringLogs += Environment.NewLine + ("########## LOJA " + company.Code + " FINALIZADA ##########");
 
                 }
             }
             catch (Exception ex)
             {
 
-                Console.WriteLine(company.Code + ": " + ex.Message);
+                viewmodel.StringLogs += Environment.NewLine + ("LOG: "+company.Code + ": " + ex.Message);
+
             }
         }
         public void ExportSingle(string companycodes, string itemcode)
@@ -138,7 +149,7 @@ namespace RODEC.Controller
             catch (Exception ex)
             {
 
-                Console.WriteLine(ex.Message);
+                viewmodel.StringLogs += Environment.NewLine + (ex.Message);
             }
         }
         public void ExportSingleItem(string companycodes, string itemcode)
@@ -177,7 +188,7 @@ namespace RODEC.Controller
                                 decimal perc = cfg.AliquotasEstaduais[company.State];
                                 bool nfce = cfg.LojasNFCE.Contains(company.Code);
 
-                                foreach (Item item in itmDao.GetItemsToExport(company.Code))
+                                foreach (Item item in itmDao.GetSingleItemToExport(company.Code,itemcode))
                                 {
                                     bool atualizado = false;
                                     item.Percentage = perc;
@@ -196,7 +207,7 @@ namespace RODEC.Controller
                                     }
                                     catch (Exception ex)
                                     {
-                                        Console.WriteLine(company.Code + ": " + ex.Message);
+                                        viewmodel.StringLogs += Environment.NewLine + (company.Code + ": " + ex.Message);
                                         atualizado = false;
 
                                     }
@@ -211,10 +222,10 @@ namespace RODEC.Controller
 
                                         }
                                     }
-                                    Console.WriteLine("LOJA:" + company.Code + " ITEM: " + item.BarCode);
+                                    viewmodel.StringLogs += Environment.NewLine + ("LOJA:" + company.Code + " ITEM: " + item.BarCode);
                                 }
                             }
-                            Console.WriteLine("########## LOJA " + company.Code + " FINALIZADA ##########");
+                            viewmodel.StringLogs += Environment.NewLine + ("########## LOJA " + company.Code + " FINALIZADA ##########");
                         }
                     }
                 }
@@ -222,7 +233,7 @@ namespace RODEC.Controller
             catch (Exception ex)
             {
 
-                Console.WriteLine( ex.Message);
+                viewmodel.StringLogs += Environment.NewLine + ( ex.Message);
             }
         }
     }

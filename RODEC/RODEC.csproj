@@ -54,6 +54,10 @@
       <Project>{982AEF7B-BC2E-4D71-889A-E030BBAC265C}</Project>
       <Name>RODEC.Controller</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RODEC.ViewModel\RODEC.ViewModel.csproj">
+      <Project>{18F038EB-390E-4FBF-99E1-5D665C6F0CBC}</Project>
+      <Name>RODEC.ViewModel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

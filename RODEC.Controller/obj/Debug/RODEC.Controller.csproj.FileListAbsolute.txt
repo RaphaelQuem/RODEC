@@ -18,3 +18,5 @@ C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.DAO.dll
 C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.Infra.dll
 C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.DAO.pdb
 C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.Infra.pdb
+C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.ViewModel.dll
+C:\Repos\RODEC\RODEC.Controller\bin\Debug\RODEC.ViewModel.pdb
