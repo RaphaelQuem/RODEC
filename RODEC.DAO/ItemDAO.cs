@@ -46,7 +46,7 @@ namespace RODEC.DAO
                 comando.CommandText += " 						LEFT JOIN " + Environment.NewLine;
                 comando.CommandText += " 						SIGOPETQ AS C WITH (NOLOCK) " + Environment.NewLine;
                 comando.CommandText += " 							ON   A.CPROS = C.CPROS " + Environment.NewLine;
-                comando.CommandText += "               WHERE	A.MERCS IN('JOI','REL') " + Environment.NewLine;
+                comando.CommandText += "               WHERE	A.MERCS IN('JOI','REL','JO') " + Environment.NewLine;
                 comando.CommandText += " ) AS Y " + Environment.NewLine;
                 comando.CommandText += " WHERE		ISNULL(Y.CODIGO_EC5,0) != 0 " + Environment.NewLine;
                 comando.CommandText += " AND		Y.CODIGO_EC5 = '"+ itemcode + "'"+ Environment.NewLine;
