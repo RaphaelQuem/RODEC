@@ -58,5 +58,11 @@ namespace RODEC.Infra
 
             return objlist;
         }
+        public static void Aggregate(this List<string> list, string str)
+        {
+            if (list.Count > 100)
+                list.Clear();
+            list.Add(str);
+        }
     }
 }

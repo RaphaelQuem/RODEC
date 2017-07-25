@@ -1,4 +1,5 @@
 ﻿using RODEC.DAO;
+using RODEC.Infra;
 using RODEC.Model;
 using RODEC.Modelo;
 using RODEC.ViewModel;
@@ -20,15 +21,16 @@ namespace RODEC.Controller
         {
             try
             {
+
                 viewmodel.Status = "Rodando";
                 viewmodel.CanRun = false;
                 viewmodel.CanStop = true;
                 Task.Factory.StartNew(() => ExportItems());
+
             }
             catch (Exception ex)
             {
-
-                viewmodel.StringLogs += Environment.NewLine + (ex.Message);
+                viewmodel.Logs.Aggregate(ex.Message);
             }
         }
         public void ExportItems()
@@ -63,7 +65,7 @@ namespace RODEC.Controller
             catch (Exception ex)
             {
 
-                viewmodel.StringLogs += Environment.NewLine + (ex.Message);
+                viewmodel.Logs.Aggregate(ex.Message);
             }
         }
         private void ExportCompanyItems(Company company, Config cfg)
@@ -106,7 +108,7 @@ namespace RODEC.Controller
                             }
                             catch (Exception ex)
                             {
-                                viewmodel.StringLogs += Environment.NewLine + (company.Code + ": " + ex.Message);
+                                viewmodel.Logs.Aggregate(company.Code + ": " + ex.Message);
                                 atualizado = false;
 
                             }
@@ -121,19 +123,16 @@ namespace RODEC.Controller
 
                                 }
                             }
-                            viewmodel.StringLogs += Environment.NewLine + ("LOJA:" + company.Code + " ITEM: " + item.BarCode);
+                            viewmodel.Logs.Aggregate("LOJA:" + company.Code + " ITEM: " + item.BarCode);
                         }
 
                     }
-                    viewmodel.StringLogs += Environment.NewLine + ("########## LOJA " + company.Code + " FINALIZADA ##########");
-
+                    viewmodel.Logs.Aggregate("########## LOJA " + company.Code + " FINALIZADA ##########");
                 }
             }
             catch (Exception ex)
             {
-
-                viewmodel.StringLogs += Environment.NewLine + ("LOG: "+company.Code + ": " + ex.Message);
-
+                viewmodel.Logs.Aggregate("LOG: " + company.Code + ": " + ex.Message);
             }
         }
         public void ExportSingle(string companycodes, string itemcode)
@@ -145,7 +144,7 @@ namespace RODEC.Controller
             catch (Exception ex)
             {
 
-                viewmodel.StringLogs += Environment.NewLine + (ex.Message);
+                viewmodel.SingleLogs.Aggregate(ex.Message);
             }
         }
         public void ExportSingleItem(string companycodes, string itemcode)
@@ -184,7 +183,7 @@ namespace RODEC.Controller
                                 decimal perc = cfg.AliquotasEstaduais[company.State];
                                 bool nfce = cfg.LojasNFCE.Contains(company.Code);
 
-                                foreach (Item item in itmDao.GetSingleItemToExport(company.Code,itemcode))
+                                foreach (Item item in itmDao.GetSingleItemToExport(company.Code, itemcode))
                                 {
                                     bool atualizado = false;
                                     item.Percentage = perc;
@@ -203,7 +202,7 @@ namespace RODEC.Controller
                                     }
                                     catch (Exception ex)
                                     {
-                                        viewmodel.StringLogs += Environment.NewLine + (company.Code + ": " + ex.Message);
+                                        viewmodel.SingleLogs.Aggregate(company.Code + ": " + ex.Message);
                                         atualizado = false;
 
                                     }
@@ -218,10 +217,10 @@ namespace RODEC.Controller
 
                                         }
                                     }
-                                    viewmodel.StringLogs += Environment.NewLine + ("LOJA:" + company.Code + " ITEM: " + item.BarCode);
+                                    viewmodel.SingleLogs.Aggregate("LOJA:" + company.Code + " ITEM: " + item.BarCode);
                                 }
                             }
-                            viewmodel.StringLogs += Environment.NewLine + ("########## LOJA " + company.Code + " FINALIZADA ##########");
+                            viewmodel.SingleLogs.Aggregate("########## LOJA " + company.Code + " FINALIZADA ##########");
                         }
                     }
                 }
@@ -229,7 +228,7 @@ namespace RODEC.Controller
             catch (Exception ex)
             {
 
-                viewmodel.StringLogs += Environment.NewLine + ( ex.Message);
+                viewmodel.SingleLogs.Aggregate(ex.Message);
             }
         }
     }

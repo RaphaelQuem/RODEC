@@ -5,16 +5,91 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RODEC.View"
         mc:Ignorable="d"
-        Title="RODEC" Height="457.387" Width="777.557">
-    <Grid Background="LightGray">
-        <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="26" Margin="512,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"/>
-        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="26" Margin="565,76,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="174"/>
-        <Button x:Name="btnExportSingle" Content="Exportar Este" HorizontalAlignment="Left" Height="41" Margin="512,120,0,0" VerticalAlignment="Top" Width="227" Click="btnExportSingleClick" />
-        <Button x:Name="btnExport" Content="Iniciar" HorizontalAlignment="Left" Height="41" Margin="10,376,0,0" VerticalAlignment="Top" Width="71" Click="btnExportClick" IsEnabled="{Binding CanRun}"/>
-        <Button x:Name="btnStop" Content="Parar" HorizontalAlignment="Left" Height="41" Margin="95,376,0,0" VerticalAlignment="Top" Width="65" Click="btnStopClick" IsEnabled="{Binding CanStop}"/>
-        <Label x:Name="label" Content="Loja" HorizontalAlignment="Left" Height="26" Margin="512,45,0,0" VerticalAlignment="Top" Width="48"/>
-        <Label x:Name="label1" Content="Código" HorizontalAlignment="Left" Height="26" Margin="565,45,0,0" VerticalAlignment="Top" Width="174"/>
-        <Label x:Name="lblStatus" Content="{Binding Status}"  HorizontalAlignment="Left" Height="53" Margin="10,4,0,0" VerticalAlignment="Top" Width="309" FontSize="32" Foreground="DarkSlateGray"/>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="306" Margin="10,57,0,0" Background="White" TextWrapping="Wrap" Text="{Binding StringLogs}" VerticalAlignment="Top" Width="497"/>
-    </Grid>
+        WindowStyle="None"
+        Background="Transparent"
+        ResizeMode="NoResize"
+        Title="RODEC" Height="609.623" WindowStartupLocation="CenterScreen" Width="1227.192">
+    <Border  >
+        <Grid Background="#053158" Margin="1,0,-1,0">
+            <TextBox x:Name="textBox1" CharacterCasing="Upper" CaretBrush="AntiqueWhite" HorizontalAlignment="Left" Height="26" Margin="643,560,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="48"  Background="Transparent" BorderBrush="White" Foreground="White" GotFocus="textBox1_GotFocus"/>
+            <TextBox x:Name="textBox" CaretBrush="AntiqueWhite" PreviewTextInput="NumberValidationTextBox" HorizontalAlignment="Left" Height="26" Margin="696,560,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="174" Background="Transparent" BorderBrush="White" Foreground="White"/>
+            <Button x:Name="btnExportSingle" Background="#053158" Foreground="White" BorderBrush="Blue" Content="Exportar Este" HorizontalAlignment="Left" Height="51" Margin="948,535,0,0" VerticalAlignment="Top" Width="227" Click="btnExportSingleClick" />
+            <Button x:Name="btnExport" Background="#053158" Foreground="White" BorderBrush="Blue" Content="Iniciar" HorizontalAlignment="Left" Height="51" Margin="38,535,0,0" VerticalAlignment="Top" Width="71" Click="btnExportClick" />
+            <Button x:Name="btnStop" Background="#053158" Foreground="White" BorderBrush="Blue" Content="Parar" HorizontalAlignment="Left" Height="51" Margin="122,535,0,0" VerticalAlignment="Top" Width="65" Click="btnStopClick" />
+            <Label x:Name="label" Content="Loja" HorizontalAlignment="Left" Height="26" Margin="643,529,0,0" VerticalAlignment="Top" Width="48" Foreground="White"/>
+            <Label x:Name="label1" Content="Código" HorizontalAlignment="Left" Height="26" Margin="696,529,0,0" VerticalAlignment="Top" Width="174" Foreground="White"/>
+
+            <DataGrid CanUserResizeColumns="True" 
+                      AutoGenerateColumns="False" 
+                      Background="#032A4B" 
+                      BorderBrush="#053158" 
+                      SelectedItem="{Binding Log}" 
+                      IsReadOnly="True" 
+                      Name="gvLog" 
+                      Margin="31,153,632,102" 
+                      AlternationCount="2" 
+                      AlternatingRowBackground="#032A4B" 
+                      RowBackground="#053158" 
+                      Foreground="White"
+                      RowHeaderWidth="0" 
+                      GridLinesVisibility="None">
+                <DataGrid.Resources>
+
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#011A2B" />
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="FontSize" Value="18"/>
+                    </Style>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Foreground" Value="#011A2B" />
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="  Log"  Binding="{Binding Path=.}" Width="510"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <DataGrid CanUserResizeColumns="True" 
+                      AutoGenerateColumns="False" 
+                      Background="#032A4B" 
+                      BorderBrush="#053158" 
+                      SelectedItem="{Binding Log}" 
+                      IsReadOnly="True" 
+                      Name="gvSingleLog" 
+                      Margin="627,153,36,102" 
+                      AlternationCount="2" 
+                      AlternatingRowBackground="#032A4B" 
+                      RowBackground="#053158" 
+                      Foreground="White"
+                      RowHeaderWidth="0" 
+                      GridLinesVisibility="None">
+                <DataGrid.Resources>
+
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="#011A2B" />
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="FontSize" Value="18"/>
+                    </Style>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="Foreground" Value="#011A2B" />
+                        <Setter Property="Background" Value="Transparent" />
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="  Log"  Binding="{Binding Path=.}" Width="510"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Button x:Name="btnFreezeLog" Background="#053158" Foreground="White" BorderBrush="Blue" Content="Travar" HorizontalAlignment="Left" Height="21" Margin="503,155,0,0" VerticalAlignment="Top" Width="65" Click="btnFreezeLog_Click" />
+            <Button x:Name="btnFreezeSingleLog" Background="#053158" Foreground="White" BorderBrush="Blue" Content="Travar" HorizontalAlignment="Left" Height="21" Margin="1099,155,0,0" VerticalAlignment="Top" Width="65" Click="btnFreezeSingleLog_Click" />
+            <Grid HorizontalAlignment="Left" Height="77" VerticalAlignment="Top" Width="1227" Background="#03223E" Margin="0,32,0,0">
+                <Label x:Name="lblStatus" Content="{Binding Status}"  HorizontalAlignment="Left" Height="53" Margin="10,10,0,0" VerticalAlignment="Top" Width="309" FontSize="32" Foreground="White" FontWeight="Bold"/>
+            </Grid>
+            <Label x:Name="label2" Content="RODEC" Height="37" VerticalAlignment="Top" Foreground="White" FontSize="22" FontWeight="Bold" Margin="571,0,536,0"/>
+            <Label x:Name="label3" Content="Integração Contínua" Height="37" VerticalAlignment="Top" Foreground="White" FontSize="22" FontWeight="Bold" Margin="31,116,974,0"/>
+            <Button x:Name="button" Content="X" HorizontalAlignment="Left" Height="27" Margin="1198,2,0,0" VerticalAlignment="Top" FontWeight="Bold" Width="26" Background="LightCoral" Click="button_Click"/>
+            <Label x:Name="label4" Content="Integração Individual" Height="37" VerticalAlignment="Top" Foreground="White" FontSize="22" FontWeight="Bold" Margin="627,116,367,0"/>
+        </Grid>
+    </Border>
 </Window>

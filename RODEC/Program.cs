@@ -11,7 +11,7 @@ namespace RODEC
 {
     class Program
     {
-        static IntegrationController controller = new IntegrationController(new MonitorVM());
+        static IntegrationController controller = new IntegrationController(null);
         IList<string> connectionStrings = new List<string>();
         static void Main(string[] args)
         {
